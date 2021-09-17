@@ -6,7 +6,7 @@ import datetime as dt
 from abc import abstractmethod, ABC
 
 # MySQL connector defined
-engine = create_engine("mysql+pymysql://root:Terumis2-@localhost:3307/payroll", echo=False)
+engine = create_engine("mysql+pymysql://user:password@localhost:port/database", echo=False)
 
 # Define and create table
 Base = declarative_base()
