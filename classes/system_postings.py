@@ -89,7 +89,9 @@ class WeeklySchedule(PaymentSchedule):
         payment = (normal * int(getattr(Func, "wage"))) + ((extra * int(getattr(Func, "wage"))) * 1.5) \
                   - (getattr(Func, "serviceCharge") + getattr(Func, "syndicateCharge"))
 
-        DbManager.update_phourly(DbManager.search(getattr(Func, "name")))
+        DbManager.update(getattr(Func, "name"), date + dt.timedelta(7), "nextPayment")
+        DbManager.update(getattr(Func, "name"), 0, "workedHours")
+        DbManager.update(getattr(Func, "name"), 0, "serviceCharge")
 
         self.pay_msg(Func, date, payment)
 
@@ -127,7 +129,9 @@ class TwoWeeklySchedule(PaymentSchedule):
                     payment = cmsd.get_payment(getattr(cmsd, "name")) - \
                               (getattr(cmsd, "syndicateCharge") + getattr(cmsd, "serviceCharge"))
 
-                    DbManager.update_pcomms(DbManager.search(getattr(cmsd, "name")))
+                    DbManager.update(getattr(cmsd, "name"), date + dt.timedelta(15), "nextPayment")
+                    DbManager.update(getattr(cmsd, "name"), 0, "sellCount")
+                    DbManager.update(getattr(cmsd, "name"), 0, "serviceCharge")
 
                     self.pay_msg(cmsd, date, payment)
             c += 1
@@ -158,14 +162,15 @@ class MonthlySchedule(PaymentSchedule):
 
         while c < lgt:
             if name_list[c]:
-                sal = employee.Salaried()
+                sal = employee.Hourly()
 
-                sal.common_attr_by_select(DbManager.search(name_list[c]))
+                sal.construct_by_select(DbManager.search(name_list[c]))
 
                 if date == getattr(sal, "nextPayment") and getattr(sal, "payType").lower() == 'monthly salary':
                     payment = getattr(sal, "wage") - (getattr(sal, "syndicateCharge") + getattr(sal, "serviceCharge"))
 
-                    DbManager.update_psal(DbManager.search(getattr(sal, "name")))
+                    DbManager.update(getattr(sal, "name"),  date + dt.timedelta(30), "nextPayment")
+                    DbManager.update(getattr(sal, "name"), 0, "serviceCharge")
 
                     self.pay_msg(sal, date, payment)
             c += 1

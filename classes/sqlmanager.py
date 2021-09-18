@@ -172,30 +172,6 @@ class SQLManager(ABC):
 
 
 class EmployeeManager(SQLManager):
-    @staticmethod
-    def update_phourly(func):
-        setattr(func, "nextPayment", dt.datetime.today() + dt.timedelta(7))
-        setattr(func, "workedHours", 0)
-        setattr(func, "serviceCharge", 0)
-
-        session.commit()
-
-    @staticmethod
-    def update_pcomms(func):
-        setattr(func, "nextPayment", dt.datetime.today() + dt.timedelta(15))
-        setattr(func, "sellCount", 0)
-        setattr(func, "serviceCharge", 0)
-
-        session.commit()
-
-    @staticmethod
-    def update_psal(func):
-        setattr(func, "nextPayment", dt.datetime.today() + dt.timedelta(30))
-        setattr(func, "workedHours", 0)
-        setattr(func, "serviceCharge", 0)
-
-        session.commit()
-
     def search(self, value, opt=0):
         slct = None
 
