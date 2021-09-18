@@ -4,6 +4,13 @@ import datetime as dt
 
 sqlmanager.Base.metadata.create_all(sqlmanager.engine)
 
+def dynamic_insert(id, name, address, j_type, payType, payMethod, isInSyndicate, tax, serviceCharge,
+                   date, wage, pointCardId, workedHours, sellCount, commissionPercent):
+    emp_mgr.insert(
+        sqlmanager.Employee(id, name, address, j_type, payType, payMethod, isInSyndicate, tax, serviceCharge,
+                            date, wage, pointCardId, workedHours, sellCount, commissionPercent)
+    )
+
 
 if __name__ == '__main__':
     emp_mgr = sqlmanager.EmployeeManager()
@@ -54,19 +61,15 @@ if __name__ == '__main__':
             payMethod = input('Choose your paymethod between: \n 1.Check by mail\n 2.Check in hand\n 3.Account deposit\n opt:')
 
             if j_type.lower() == 'hourly':
-                emp_mgr.insert(
-                    sqlmanager.Employee(None, name, address, j_type, 'hourly wage', payMethod, isInSyndicate, tax, 0,
-                                        dt.date.today() + dt.timedelta(7), wage, str(uuid.uuid4()), 0, None, None))
+                dynamic_insert(None, name, address, j_type.lower(), 'hourly wage', payMethod, isInSyndicate, tax, 0,
+                                dt.date.today() + dt.timedelta(7), wage, str(uuid.uuid4()), 0, None, None)
             elif j_type.lower() == 'salaried':
-                emp_mgr.insert(
-                    sqlmanager.Employee(None, name, address, j_type, 'monthly salary', payMethod, isInSyndicate, tax, 0,
-                                        dt.date.today() + dt.timedelta(30), wage, None, None, None, None))
+                dynamic_insert(None, name, address, j_type.lower(), 'monthly salary', payMethod, isInSyndicate, tax, 0,
+                                dt.date.today() + dt.timedelta(30), wage, None, None, None, None)
             elif j_type.lower() == 'commissioned':
                 percentComm = input('Enter the percentual of commission: ')
-
-                emp_mgr.insert(
-                    sqlmanager.Employee(None, name, address, j_type, 'commission', payMethod, isInSyndicate, tax, 0,
-                                        dt.date.today() + dt.timedelta(15), wage, None, None, 0, percentComm))
+                dynamic_insert(None, name, address, j_type.lower(), 'commission', payMethod, isInSyndicate, tax, 0,
+                                dt.date.today() + dt.timedelta(15), wage, None, None, 0, percentComm)
         elif x == 2:
             name = input('Enter the name of the employee to be removed: ')
             emp_mgr.delete(name)
