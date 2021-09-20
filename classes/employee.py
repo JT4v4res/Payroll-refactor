@@ -1,5 +1,4 @@
 import abc
-
 from classes import sqlmanager
 from abc import abstractmethod
 
